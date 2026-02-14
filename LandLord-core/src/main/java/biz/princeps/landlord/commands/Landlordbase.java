@@ -180,6 +180,7 @@ public class Landlordbase extends MainCommand {
                     if (subCommand instanceof LandMap) {
                         tabReturn.add("on");
                         tabReturn.add("off");
+                        tabReturn.add("claim");
                         return tabReturn;
                     }
 
@@ -238,6 +239,13 @@ public class Landlordbase extends MainCommand {
                         }
                         return tabReturn;
                     }
+
+                    if (subCommand instanceof LandMap) {
+                        if ("claim".equalsIgnoreCase(args[1]) && sender instanceof Player) {
+                            tabReturn.add(String.valueOf(((Player) sender).getLocation().getChunk().getX()));
+                        }
+                        return tabReturn;
+                    }
                 }
             }
         } else if (args.length == 4) {
@@ -245,6 +253,12 @@ public class Landlordbase extends MainCommand {
                 if (subCommand.matches(args[0])) {
                     if (subCommand instanceof GiveClaims) {
                         tabReturn.add("<amount>");
+                    }
+
+                    if (subCommand instanceof LandMap) {
+                        if ("claim".equalsIgnoreCase(args[1]) && sender instanceof Player) {
+                            tabReturn.add(String.valueOf(((Player) sender).getLocation().getChunk().getZ()));
+                        }
                     }
                 }
             }
