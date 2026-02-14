@@ -11,7 +11,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
 
@@ -20,9 +19,7 @@ import java.util.Map;
  */
 public class LandMap {
 
-    private final ILandLord plugin;
     private final IWorldGuardManager wg;
-    private final long refreshRate;
     private final int radius;
     private final String ownSymbol;
     private final String friendsSymbol;
@@ -35,14 +32,7 @@ public class LandMap {
     private final String friends;
     private final String others;
 
-    private final Player mapViewer;
-    private Chunk currChunk;
-    private String currDir;
-    private boolean update;
-    private BukkitTask task;
-
     LandMap(Player p, ILandLord plugin, MapConstants cons) {
-        this.plugin = plugin;
         this.wg = plugin.getWGManager();
         this.ownSymbol = plugin.getConfig().getString("CommandSettings.Map.symbols.yours");
         this.friendsSymbol = plugin.getConfig().getString("CommandSettings.Map.symbols.friends");
@@ -50,17 +40,12 @@ public class LandMap {
         this.background1 = plugin.getConfig().getString("CommandSettings.Map.symbols.background1", "#");
         this.background2 = plugin.getConfig().getString("CommandSettings.Map.symbols.background2", ".");
         this.middleSymbol = plugin.getConfig().getString("CommandSettings.Map.symbols.middle", "@");
-        this.refreshRate = plugin.getConfig().getLong("Map.refreshRate", 10);
-        this.radius = Math.max(3, plugin.getConfig().getInt("Map.chatRadius", 5));
+        this.radius = Math.max(3, plugin.getConfig().getInt("Map.chatRadius", 7));
         this.header = plugin.getLangManager().getRawString("Commands.LandMap.header");
         this.yours = plugin.getLangManager().getRawString("Commands.LandMap.yours");
         this.friends = plugin.getLangManager().getRawString("Commands.LandMap.friends");
         this.others = plugin.getLangManager().getRawString("Commands.LandMap.others");
-
-        this.mapViewer = p;
-        this.currChunk = p.getLocation().getChunk();
-        this.currDir = getPlayerDirection(p);
-        this.displayMap(this.mapViewer);
+        this.sendChatMap(p);
     }
 
     private static String getPlayerDirection(Player playerSelf) {
@@ -110,26 +95,10 @@ public class LandMap {
     }
 
     public Player getMapViewer() {
-        return mapViewer;
+        return null;
     }
 
     void removeMap() {
-        if (task != null) {
-            task.cancel();
-            task = null;
-        }
-    }
-
-    private void displayMap(Player p) {
-        this.task = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
-            if (!update && currChunk.equals(mapViewer.getLocation().getChunk())
-                    && currDir.equals(getPlayerDirection(mapViewer))) {
-                return;
-            }
-            update = false;
-            updateMap();
-            sendChatMap(p);
-        }, 0L, refreshRate);
     }
 
     private void sendChatMap(Player p) {
@@ -185,12 +154,6 @@ public class LandMap {
         p.sendMessage(ChatColor.GRAY + "Click en un chunk para ejecutar /land claim en esa posicion.");
     }
 
-    private void updateMap() {
-        this.currChunk = mapViewer.getLocation().getChunk();
-        this.currDir = getPlayerDirection(mapViewer);
-    }
-
     void forceUpdate() {
-        this.update = true;
     }
 }

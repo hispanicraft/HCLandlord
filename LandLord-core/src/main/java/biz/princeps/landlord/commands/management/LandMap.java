@@ -1,7 +1,6 @@
 package biz.princeps.landlord.commands.management;
 
 import biz.princeps.landlord.api.ILandLord;
-import biz.princeps.landlord.api.Options;
 import biz.princeps.landlord.commands.LandlordCommand;
 import biz.princeps.landlord.commands.claiming.Claim;
 import biz.princeps.lib.command.Arguments;
@@ -36,22 +35,17 @@ public class LandMap extends LandlordCommand {
         Player player = properties.getPlayer();
 
         if (arguments.size() == 0) {
-            onToggleLandMap(player);
+            onShowMap(player);
             return;
         }
 
         String arg = arguments.get(0);
-
-        if (arguments.size() == 1) {
-            if (arg.equalsIgnoreCase("on") || arg.equalsIgnoreCase("off")) {
-                onToggleLandMap(player, arg.toLowerCase());
-            }
+        if (arg.equalsIgnoreCase("claim") && arguments.size() == 3) {
+            onMapClaim(player, arguments.get(1), arguments.get(2));
             return;
         }
 
-        if (arg.equalsIgnoreCase("claim") && arguments.size() == 3) {
-            onMapClaim(player, arguments.get(1), arguments.get(2));
-        }
+        onShowMap(player);
     }
 
     private void onMapClaim(Player player, String chunkXRaw, String chunkZRaw) {
@@ -89,32 +83,10 @@ public class LandMap extends LandlordCommand {
         return false;
     }
 
-    private void onToggleLandMap(Player player) {
-
-        if (isDisabledWorld(player))
-            return;
-
-        if (Options.enabled_map())
-            plugin.getMapManager().toggleMap(player);
-        else {
-            lm.sendMessage(player, lm.getString(player, "Commands.LandMap.disabled"));
-        }
-
-    }
-
-    private void onToggleLandMap(Player player, String state) {
-        if (isDisabledWorld(player))
-            return;
-
-        if (!Options.enabled_map()) {
-            lm.sendMessage(player, lm.getString(player, "Commands.LandMap.disabled"));
+    private void onShowMap(Player player) {
+        if (isDisabledWorld(player)) {
             return;
         }
-
-        if (state.equals("on")) {
-            plugin.getMapManager().addMap(player);
-        } else {
-            plugin.getMapManager().removeMap(player);
-        }
+        plugin.getMapManager().addMap(player);
     }
 }

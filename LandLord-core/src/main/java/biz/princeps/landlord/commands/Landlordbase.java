@@ -178,8 +178,6 @@ public class Landlordbase extends MainCommand {
                     }
 
                     if (subCommand instanceof LandMap) {
-                        tabReturn.add("on");
-                        tabReturn.add("off");
                         tabReturn.add("claim");
                         return tabReturn;
                     }

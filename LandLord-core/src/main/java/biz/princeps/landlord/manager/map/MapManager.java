@@ -26,28 +26,17 @@ public class MapManager implements IMapManager {
 
     @Override
     public void toggleMap(Player p) {
-        if (hasMap(p.getUniqueId())) {
-            removeMap(p);
-        } else {
-            addMap(p);
-        }
+        addMap(p);
     }
 
     @Override
     public void addMap(Player player) {
-        if (!hasMap(player.getUniqueId())) {
-            mapList.put(player.getUniqueId(), new LandMap(player, plugin, constants));
-        }
+        new LandMap(player, plugin, constants);
     }
 
     @Override
     public void removeMap(Player player) {
-        UUID pUUID = player.getUniqueId();
-        if (hasMap(pUUID)) {
-            LandMap curr = mapList.get(pUUID);
-            curr.removeMap();
-            mapList.remove(pUUID);
-        }
+        // one-shot map mode: nothing to remove
     }
 
     @Override
@@ -60,16 +49,12 @@ public class MapManager implements IMapManager {
 
     @Override
     public void updateAll() {
-        for (UUID uuid : mapList.keySet()) {
-            mapList.get(uuid).forceUpdate();
-        }
+        // one-shot map mode: no active maps to refresh
     }
 
     @Override
     public void update(UUID playerUUID) {
-        if (hasMap(playerUUID)) {
-            mapList.get(playerUUID).forceUpdate();
-        }
+        // one-shot map mode: no active map state per player
     }
 
     @Override
