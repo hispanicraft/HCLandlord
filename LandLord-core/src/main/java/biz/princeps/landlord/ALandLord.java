@@ -81,12 +81,10 @@ public abstract class ALandLord extends JavaPlugin implements ILandLord, Listene
     public void onEnable() {
         EldoUtilities.ignite(this);
 
+        setupConfig();
         Options.setConfig(this.getConfig(), getVault() != null);
         setupPrincepsLib();
-
         checkWorldNames();
-
-        setupConfig();
         setupIntegrations();
         setupItems();
         setupManagers();
@@ -156,7 +154,7 @@ public abstract class ALandLord extends JavaPlugin implements ILandLord, Listene
         this.configurationManager = new ConfigurationManager(this);
         this.saveDefaultConfig();
         this.configurationManager.handleConfigUpdate(this.getDataFolder() + "/config.yml", "/config.yml");
-        this.saveDefaultConfig();
+        this.reloadConfig();
     }
 
     /**

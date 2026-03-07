@@ -1,0 +1,457 @@
+# Landlord - Español (España) + STYLE Hispanicraft
+# Prefijo: &7|&f|&6&lH&e&lC&f|&7| | Éxito: ✔ &a | Error: ✖ &c
+
+Tag: '&7|&f|&6&lH&e&lC&f|&7|'
+Disabled-World: '&7Reclamar terreno está desactivado en este mundo'
+noPermissions: '&7Sin permiso'
+noPermissionsCmd: '&c✖ No tienes permiso para ejecutar /%cmd%'
+locOutsideWorld: '&7No puedes interactuar con el chunk %chunk% estando fuera del mundo %world%'
+pleaseWait: '&7Espera...'
+Commands:
+  Claim:
+    success: '&a✔ Has reclamado el chunk %chunk% en %world%'
+    p2pSuccess: '&a✔ %player% ha comprado tu chunk %chunk% en %world% por %price%'
+    notEnoughMoney: '&c✖ No tienes suficiente dinero (%money%) para reclamar este chunk (%chunk%)'
+    moneyTook: '&cTe han cobrado %money% por el terreno %chunk%'
+    alreadyClaimed: '&c✖ Este chunk ya está reclamado por %owner%'
+    limit: '&eNecesitas comprar más claims (%regions%/%claims%). Clic para comprar.'
+    hardcap: '&c✖ No puedes reclamar más de %regions% terrenos'
+    notAllowed: '&c✖ No tienes permiso para reclamar aquí'
+    aborted: '&eReclamación cancelada'
+    onlyClaimAdjacentChunks: '&c✖ No puedes reclamar %land%: no tienes un chunk adyacente'
+    needsGap: '&c✖ No puedes reclamar %land%: debe haber un hueco entre tu terreno y el de otros'
+    boughtUp: '&a✔ Has comprado el chunk %chunk% a %player% por %price%'
+    notYetInactive: '&c✖ %owner% aún no está inactivo. Debes esperar al menos %days% días más'
+    confirmation: '&a¿Reclamar el chunk %chunk% por %price%? Clic aquí para confirmar'
+  Info:
+    online: '&bEN LÍNEA'
+    noLastSeen: '&c-'
+    owned:
+      - '&f&lLand&c&lLord &a- Terreno propio'
+      - '&7Nombre&8: &c%landid%'
+      - '&7Dueño&8: &c%owner%   &7Última vez&8: &c%lastseen%'
+      - '&7Miembros&8: &c%member%'
+    advertised:
+      - '&f&lLand&c&lLord &a- En venta'
+      - '&7Nombre&8: &c%landid%'
+      - '&7Dueño&8: &c%owner%   &7Última vez&8: &c%lastseen%'
+      - '&7Miembros&8: &c%member%'
+      - '&7Precio&8: &c&o%price%'
+    inactive:
+      - '&f&lLand&c&lLord &a- Terreno inactivo'
+      - '&7Nombre&8: &c%landid%'
+      - '&7Dueño&8: &c%owner%   &7Última vez&8: &c%lastseen%'
+      - '&7Miembros&8: &c%member%'
+      - '&7Precio&8: &c&o%price%'
+    free:
+      - '&f&lLand&c&lLord &a- Terreno libre'
+      - '&7Nombre&8: &c%landid%'
+      - '&7Precio&8: &c&o%price%'
+  MultiClaim:
+    guiMessage: 'Reclamar %amount% terrenos (%cost%)'
+    chatMessage: '&aClic para confirmar la compra de %amount% terrenos. Coste: %cost%'
+    noLands: '&c✖ No hay terrenos reclamables en el radio seleccionado'
+    hugeSize: '&c✖ El tamaño del multiclaim es demasiado alto. Usa un valor menor que %max_size%'
+    abort: '&cHas cancelado la reclamación de %amount% terrenos'
+  MultiUnclaim:
+    confirm: '&cConfirmar liberación de los terrenos seleccionados'
+    hugeSize: '&c✖ El tamaño es demasiado alto. Usa un valor menor que %max_size%'
+    notOwnFreeLand: '&c✖ No tienes ningún terreno'
+    success: '&a✔ Has liberado %amount% chunk(s) y has recuperado &e%money%'
+  MultiAddfriend:
+    noPlayer: '&c✖ No se encontró al jugador &c%player%'
+    success: '&a✔ Has añadido a &e%player% &aen los &e%count% &aterrenos seleccionados'
+    alreadyOwn: '&c✖ No puedes añadir al dueño como miembro'
+  MultiUnfriend:
+    noPlayer: '&c✖ No se encontró a: &c%players%'
+    success: '&a✔ Has quitado a &e%players% &ade los &e%count% &aterrenos seleccionados'
+    noFriend: '&c✖ %player% no es amigo en ninguno de los terrenos seleccionados'
+  MultiListLands:
+    noLands: '&7No tienes terrenos en la selección'
+    gui:
+      header: '&2Terrenos de %player%'
+      itemname: '&d%name%'
+      lore:
+        - '&aNombre: &f%name%'
+        - ''
+        - '&aCoords: &f%realx%&c/&f%realz%'
+        - ''
+        - '&aMiembros: &f%members%'
+        - ''
+        - '%flags%'
+      flagformat: '&a%flagname%: &8(&fAmigos: &a%friend% &fTodos: &a%all%&8)'
+      multiManage: '&7Gestionar terrenos seleccionados'
+    chat:
+      previous: '&8[&7Anterior&8]'
+      next: '&8[&7Siguiente&8]'
+      segment: '&eNombre: &c%landname% &eMiembros: &c%members%'
+    noPlayer: '&c✖ No se encontró a &c%player%'
+  Regenerate:
+    notOwn: '&7No eres dueño de este chunk. No puedes regenerar terreno libre'
+    success: '&a✔ Regeneración del terreno &e%land% &acompletada'
+    abort: '&7Regeneración del terreno &c%land% cancelada'
+    notEnoughMoney: '&c✖ No tienes suficiente dinero para regenerar &e%name% &c(Coste: &e%cost%&c)'
+    confirmation: '&7Coste de regeneración &c%cost%'
+  Unclaim:
+    notOwn: '&c✖ No eres dueño de este chunk. Pertenece a &e%owner%'
+    notOwnFreeLand: '&c✖ No eres dueño de este chunk'
+    success: '&a✔ Has liberado el chunk &e%chunk% &aen &e%world% &ay has recuperado &e%money%'
+    confirm: '&cConfirmar liberación del terreno %land%'
+  UnclaimAll:
+    invalidWorld: '&c✖ El mundo indicado no existe'
+    notOwnFreeLand: '&c✖ No tienes ningún terreno'
+    success: '&a✔ Has liberado %amount% chunk(s) en &e%world% &ay has recuperado &e%money%'
+    confirm: '&cConfirmar liberación de todos tus terrenos en todos los mundos'
+  Listfriends:
+    invalidWorld: '&c✖ El mundo indicado no existe'
+    invalidGeneral: '&c✖ Las coordenadas no son válidas'
+    freeLand: '&cUn chunk sin reclamar no tiene amigos'
+    friends: '&aAmigos: %friends%'
+    noFriends: '&cEste terreno no tiene amigos'
+  Addfriend:
+    notOwn: '&c✖ No eres dueño de este chunk. Pertenece a &e%owner%'
+    noPlayer: '&c✖ No se encontró a: &c%players%'
+    success: '&a✔ Has añadido a &e%players% &aen este terreno'
+    alreadyOwn: '&c✖ No puedes añadir al dueño como miembro'
+  Unfriend:
+    notOwn: '&c✖ No eres dueño de este chunk. Pertenece a &e%owner%'
+    noPlayer: '&c✖ No se encontró a: &c%players%'
+    success: '&a✔ Has quitado a &e%players% &ade este terreno'
+  AddfriendAll:
+    noPlayer: '&c✖ No se encontró al jugador &c%player%'
+    success: '&a✔ Has añadido a &e%player% &aen los &e%count% &aterrenos que posees'
+    alreadyOwn: '&c✖ No puedes añadir al dueño como miembro'
+  UnfriendAll:
+    noPlayer: '&c✖ No se encontró a: &c%players%'
+    success: '&a✔ Has quitado a &e%players% &ade los &e%count% &aterrenos que posees'
+    noFriend: '&c✖ %player% no es amigo en ninguno de tus terrenos'
+  ListLands:
+    noLands: '&7No tienes ningún terreno'
+    gui:
+      header: '&2Terrenos de %player%'
+      itemname: '&d%name%'
+      lore:
+        - '&aNombre: &f%name%'
+        - ''
+        - '&aCoords: &f%realx%&c/&f%realz%'
+        - ''
+        - '&aMiembros: &f%members%'
+        - ''
+        - '%flags%'
+      flagformat: '&a%flagname%: &8(&fAmigos: &a%friend% &fTodos: &a%all%&8)'
+      manageAll: '&7Gestionar todos los terrenos'
+    chat:
+      previous: '&8[&7Anterior&8]'
+      next: '&8[&7Siguiente&8]'
+      segment: '&eNombre: &c%landname% &eMiembros: &c%members%'
+    noPlayer: '&c✖ No se encontró a &c%player%'
+  LandMap:
+    disabled: '&7El mapa de terrenos está &cdesactivado'
+    header: '&e&m==&r&6&c&lTerrenos&r&e&m=='
+    yours: 'Tuyos'
+    friends: 'Amigos'
+    others: 'Otros'
+  Clear:
+    noPlayer: '&c✖ No se encontró a: &c%players%'
+    gui:
+      title: "Menú de limpieza"
+      clearcurrentland:
+        name: "Liberar terreno actual"
+        desc: "Solo libera el terreno|en el que estás"
+        confirm: "¿Liberar este terreno?"
+        abort: "&c✖ Liberación cancelada"
+        success: "&a✔ Terreno %land% liberado"
+      clearplayer:
+        name: "Limpiar jugador"
+        desc: "Libera todos los terrenos|del jugador dueño del terreno|en el que estás"
+        confirm: "¿Liberar terrenos del jugador?"
+        abort: "&c✖ Acción cancelada"
+        success: '&a✔ Se han liberado &e%count% &aterrenos de &e%player%'
+      clearworld:
+        name: "Limpiar todo el mundo"
+        desc: "Libera todos los terrenos|del mundo actual. ¡Cuidado!"
+        confirm: "¿Liberar todos los terrenos de %world%?"
+        abort: "&c✖ Acción cancelada"
+        success: '&a✔ Se han liberado &e%count% &aterrenos en &e%world%'
+  ClearInactive:
+    info: '&7Limpiando terrenos de jugadores inactivos más de &e%inactivity% &7días...'
+    success: '&a✔ Limpieza completada: &e%players% &ajugadores (&e%lands% &aterrenos), inactivos más de &e%inactivity% &adías'
+  Item:
+    noPlayer: '&c✖ No se encontró a: &c%players%'
+  Manage:
+    info:
+      title: '&aInformación'
+      description:
+        - 'Terreno: %land%'
+    friends:
+      title: '&aAmigos'
+      description:
+        - 'Clic en esta fila para gestionar permisos de amigos'
+    everyone:
+      title: '&aTodos'
+      description:
+        - 'Clic en esta fila para gestionar permisos para todos'
+    allow: '&aPermitir'
+    deny: '&cDenegar'
+    prevArrow: '&aPágina anterior'
+    nextArrow: '&aPágina siguiente'
+    all:
+      header: '&7Gestionando &ctodos los terrenos'
+    multi:
+      header: '&7Gestionando &cterrenos seleccionados'
+    notOwn: '&c✖ No eres dueño de este chunk. Pertenece a &e%owner%'
+    notOwnFreeLand: '&c✖ No eres dueño de este chunk'
+    header: '&c%info%'
+    invalidArguments: '&c✖ Argumentos no válidos'
+    AllowDamage-animals:
+      title: '&cDaño a animales'
+      description:
+        - ' &7Permitir o denegar que los jugadores'
+        - ' &7dañen mobs en este chunk'
+    AllowRide:
+      title: '&cMontar mobs'
+      description:
+        - ' &7Permitir montar entidades'
+        - ' &7en este chunk'
+    AllowFrosted-ice-form:
+      title: '&cBotas de hielo'
+      description:
+        - ' &7Permitir usar botas de hielo'
+        - ' &7en este chunk'
+    AllowBlock-trampling:
+      title: '&cPisar cultivos'
+      description:
+        - ' &7Permitir pisar farmland'
+        - ' &7en este chunk'
+    AllowPotion-splash:
+      title: '&cPociones de splash'
+      description:
+        - ' &7Permitir lanzar pociones'
+        - ' &7en este chunk'
+    AllowPistons:
+      title: '&cPistones'
+      description:
+        - ' &7Permitir usar pistones'
+        - ' &7en este chunk'
+    AllowBuild:
+      title: '&cConstruir'
+      description:
+        - ' &7Permitir construir'
+        - ' &7en este chunk'
+    AllowInteract:
+      title: '&cInteracción'
+      description:
+        - ' &7Permitir interactuar (p. ej. redstone)'
+    AllowChest-access:
+      title: '&cAcceso a cofres'
+      description:
+        - ' &7Permitir abrir contenedores'
+    AllowCreeper-explosion:
+      title: '&cExplosiones de creeper'
+      description:
+        - ' &7Permitir que los creepers'
+        - ' &7destruyan bloques'
+    AllowPvp:
+      title: '&cPvP'
+      description:
+        - ' &7Permitir que los jugadores'
+        - ' &7se golpeen entre sí'
+    AllowSpread-flags:
+      title: '&cPropagar flags'
+      description:
+        - ' &7Propagar valores de flags'
+        - ' &7a terrenos seleccionados'
+    AllowSpread-mobs:
+      title: '&cPropagar spawn de mobs'
+      description:
+        - ' &7Propagar spawn de mobs'
+        - ' &7a terrenos seleccionados'
+    AllowSpread-friends:
+      title: '&cPropagar amigos'
+      description:
+        - ' &7Propagar amigos'
+        - ' &7a terrenos seleccionados'
+    AllowMob-spawning:
+      title: '&cSpawn de mobs'
+      description:
+        - ' &7Permitir que los mobs'
+        - ' &7aparezcan en tu terreno'
+      toggleItem:
+        title: 'Spawn %mob%'
+        description:
+          - 'Spawn de %mob%: %value%'
+        deny: 'denegar'
+        allow: 'permitir'
+    SetGreet:
+      title: '&cMensaje de bienvenida'
+      description:
+        - ' &7Mensaje al entrar en el chunk'
+        - ' &7Mensaje&8: &c%var%'
+      clickMsg: '&7Clic para establecer mensaje de bienvenida'
+      successful: '&a✔ Mensaje de bienvenida: %msg%'
+    SetFarewell:
+      title: '&cMensaje de despedida'
+      description:
+        - ' &7Mensaje al salir del chunk'
+        - ' &7Mensaje&8: &c%var%'
+      clickMsg: '&7Clic para establecer mensaje de despedida'
+      successful: '&a✔ Mensaje de despedida: %msg%'
+    ManageFriends:
+      title: '&cGestionar amigos'
+      description:
+        - ' &7Gestionar amigos en este chunk'
+      friendSegment:
+        - ' &7Última vez&8: &c%seen%'
+        - ' &7Clic para quitar'
+      unfriend: '&7Quitando a &c%player%'
+    ClanAccess:
+      title: '&cAcceso por clan'
+      description:
+        - ' &7Alternar si los miembros del clan del'
+        - ' &7dueño cuentan como acceso confiable'
+        - ' &7Estado&8: &c%var%'
+    Unclaim:
+      title: '&cLiberar'
+      description:
+        - '&7Clic aquí para liberar este chunk'
+      confirmationTitle: '&aLiberando %land%'
+    Regenerate:
+      title: '&cRegenerar'
+      description:
+        - ' &7Regenerar tu terreno'
+        - ' &7Coste&8: &c%regencost%'
+      confirmation: '&7Coste de regeneración &c%cost%'
+  Help:
+    header: '&f&lLand&c&lLord'
+    admins:
+      - '&c/land clear &8- &7Abre el menú de limpieza'
+      - '&c/land admintp &8- &7Teletransporte admin'
+      - '&c/land update &8- &7Actualiza terrenos con nuevos flags'
+      - '&c/land giveclaims &8- &7Dar claims a usuarios'
+    players:
+      - '&c/land &8- &7Ver comandos'
+      - '&c/land claim &8- &7Reclamar el chunk actual'
+      - '&c/land multiclaim <modo> <radio> &8- &7Reclamar varios a la vez'
+      - '&c/land unclaim &8- &7Liberar el chunk actual'
+      - '&c/land multiunclaim <modo> <radio> &8- &7Liberar varios a la vez'
+      - '&c/land addfriend <jugador> &8- &7Añadir amigo en tu terreno'
+      - '&c/land unfriend <jugador> &8- &7Quitar amigo'
+      - '&c/land multiaddfriend <modo> <radio> <jugador> &8- &7Añadir amigo en varios'
+      - '&c/land multiunfriend <modo> <radio> <jugador> &8- &7Quitar amigo de varios'
+      - '&c/land friendall <jugador> &8- &7Añadir amigo en todos tus terrenos'
+      - '&c/land unfriendall <jugador> &8- &7Quitar amigo de todos'
+      - '&c/land friends &8- &7Ver amigos del terreno actual'
+      - '&c/land manage &8- &7Gestionar chunk actual'
+      - '&c/land multimanage <modo> <radio> &8- &7Gestionar varios'
+      - '&c/land manageall &8- &7Gestionar todos tus terrenos'
+      - '&c/land list &8- &7Listar tus terrenos'
+      - '&c/land multilist <modo> <radio> &8- &7Listar varios'
+      - '&c/land info &8- &7Info del terreno actual'
+      - '&c/land map &8- &7Activar/desactivar mapa de terrenos'
+      - '&c/land shop &8- &7Tienda de claims'
+      - '&c/land sethome &8- &7Establecer casa en uno de tus terrenos'
+      - '&c/land home &8- &7Ir a tu casa'
+      - '&c/land borders &8- &7Ver/ocultar bordes'
+      - '&c/land item &8- &7Ítem de gestión'
+      - '&c/land advertise &8- &7Poner terreno en venta'
+      - '&c/land removeadvertise &8- &7Quitar de la venta'
+    previous: '&8[&7Anterior&8]'
+    next: '&8[&7Siguiente&8]'
+  Reload:
+    success: '&a✔ Landlord recargado correctamente'
+  Claims:
+    message: '&aClaims: %regions%/%claims%'
+    noClaims: '&eNecesitas comprar claims. Clic para abrir la tienda'
+    disabled: '&eEsta función está desactivada'
+  SetHome:
+    notOwn: '&c✖ No eres dueño de este chunk. Pertenece a &e%owner%'
+    success: '&a✔ Casa establecida en tu ubicación actual'
+    disabled: '&eEsta función está desactivada'
+    removed: '&eTu casa se ha quitado porque liberaste ese terreno'
+    nullLand: '&ePrimero debes reclamar este terreno'
+  Home:
+    noHome: '&c✖ Aún no tienes casa. Clic para establecer casa aquí'
+    dontMove: '&cEste comando se ejecutará en %time% segundos. No te muevas'
+    youMoved: '&c✖ Te has movido. Teletransporte cancelado'
+    countdown: '&bNo te muevas &6-- &4&l%countdown% &6-- &bNo te muevas'
+    notEnoughMoney: '&c✖ No tienes suficiente dinero para teletransportarte (Coste: &e%cost%&c)'
+    costing: '&aTe han cobrado %cost% por ir a casa'
+    welcomeHome: '&aBienvenido a la casa de %player%'
+    disabled: '&eEsta función está desactivada'
+    otherNoHome: '&c✖ El jugador %player% aún no tiene casa'
+  GiveClaims:
+    noPlayer: '&c✖ No hay ningún jugador con ese nombre'
+    success: '&a✔ Has recibido %amount% claims'
+  Advertise:
+    notOwnFreeLand: '&c✖ No eres dueño de este chunk'
+    notOwn: '&c✖ No eres dueño de este chunk. Pertenece a &e%owner%'
+    success: '&a✔ Has puesto %landname% en venta por %price%'
+  RemoveAdvertise:
+    success: '&a✔ Anuncio de venta quitado del terreno %landname%'
+    noAdvertise: '&c✖ El terreno %landname% no está en venta'
+  Borders:
+    activated: '&a✔ Vista de bordes activada. Clic para desactivar'
+    deactivated: '&eVista de bordes desactivada'
+  AdminTp:
+    noPlayer: '&c✖ No se encontró al jugador %player%'
+    noLands: '&c✖ El jugador %player% no tiene terrenos'
+    guiHeader: 'Terrenos de %player%'
+  AdminClaim:
+    noPlayer: '&c✖ No hay jugador con el nombre %player%'
+    alreadyOwned: '&c✖ El terreno %land% ya tiene dueño'
+    success: '&a✔ El terreno %land% es ahora de %name%'
+Alerts:
+  defaultGreeting: '&7Entrando en terreno de %owner%'
+  defaultFarewell: '&7Saliendo del terreno de %owner%'
+  tresholdNotReached: '&c✖ No puedes construir aquí. Debes tener %x% terrenos'
+Confirmation:
+  accept: '&bAceptar'
+  decline: '&eRechazar'
+Shop:
+  title: 'Tienda de claims'
+  notEnoughMoney: '&c✖ No tienes suficiente dinero para %number% claims (Coste: &e%cost%&c)'
+  successBuy: '&a✔ Has comprado %number% claims por %cost%'
+  successSell: '&a✔ Has vendido %number% claims por %cost%'
+  abort: '&c✖ Has cancelado la transacción'
+  gui:
+    lands:
+      name: '&aTerrenos'
+      lore:
+        - '&fTerrenos que posees'
+        - ''
+        - '&fTienes &e%amount% &fterrenos'
+    claims:
+      name: '&aClaims'
+      lore:
+        - '&fClaims que tendrás'
+        - '&ftras la transacción'
+        - ''
+        - '&fTendrás &e%amount% &fclaims'
+        - ''
+        - '&fPuedes comprar hasta'
+        - '&e%max% &fclaims'
+    decrease1: '&c-1'
+    decrease5: '&c-5'
+    decrease10: '&c-10'
+    increase1: '&a+1'
+    increase5: '&a+5'
+    increase10: '&a+10'
+    confirm:
+      name: '&aConfirmar'
+      lore:
+        - '&fClaims: %delta%'
+        - '&fPrecio: %price%'
+    error:
+      name: '&cError'
+      lore:
+        - '&cNo tienes suficiente dinero'
+        - '&cCoste: %cost%'
+        - '&cTienes: %own%'
+    abort: '&cCancelar'
+
+Integrations:
+  Towny:
+    TownyPresent: '&c✖ Ya existe una región de Towny'
+    LLPresent: '&c✖ Ya existe una región de Landlord'
+
+version: 26

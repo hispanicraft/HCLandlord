@@ -434,11 +434,12 @@ public class AManage extends AbstractGUI {
 
         if (plugin.getConfig().getBoolean("Manage.clan-access.enable") &&
                 player.hasPermission("landlord.player.manage.clan-access")) {
-            Icon icon = new Icon(new ItemStack(Material.valueOf(plugin.getConfig().getString("Manage.clan-access.item"))));
+            boolean clanAccessEnabled = land.isClanAccessEnabled();
+            Icon icon = new Icon(new ItemStack(getToggleMaterial("Manage.clan-access", clanAccessEnabled)));
             icon.setName(lm.getRawString("Commands.Manage.ClanAccess.title"));
             icon.setLore(formatList(lm.getStringList("Commands.Manage.ClanAccess.description"), "%var%",
-                    formatToggleState(land.isClanAccessEnabled())));
-            setGlowing(icon.itemStack, land.isClanAccessEnabled());
+                    formatToggleState(clanAccessEnabled)));
+            setGlowing(icon.itemStack, clanAccessEnabled);
             icon.addClickAction((p) -> {
                 boolean targetState = !land.isClanAccessEnabled();
                 toggleClanAccessForRegions(targetState);
@@ -624,6 +625,25 @@ public class AManage extends AbstractGUI {
 
     private String formatToggleState(boolean bool) {
         return bool ? lm.getRawString("Commands.Manage.allow") : lm.getRawString("Commands.Manage.deny");
+    }
+
+    private Material getToggleMaterial(String path, boolean enabled) {
+        Material fallback = getConfiguredMaterial(path + ".item", Material.LEVER);
+        return getConfiguredMaterial(path + (enabled ? ".enabled-item" : ".disabled-item"), fallback);
+    }
+
+    private Material getConfiguredMaterial(String path, Material fallback) {
+        String materialName = plugin.getConfig().getString(path);
+        if (materialName == null || materialName.isEmpty()) {
+            return fallback;
+        }
+
+        try {
+            return Material.valueOf(materialName);
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("Invalid material configured at " + path + ": " + materialName + ". Falling back to " + fallback + ".");
+            return fallback;
+        }
     }
 
     private void setGlowing(ItemStack stack, boolean glowing) {

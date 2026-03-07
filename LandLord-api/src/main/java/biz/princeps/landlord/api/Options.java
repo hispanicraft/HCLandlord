@@ -71,5 +71,7 @@ public class Options {
     public static void setConfig(FileConfiguration config, boolean hasVault) {
         cfg = config;
         Options.hasVault = cfg.getBoolean("Economy.enable") && hasVault;
+        MANAGE_SIZE = 0;
+        toggleMobs = null;
     }
 }

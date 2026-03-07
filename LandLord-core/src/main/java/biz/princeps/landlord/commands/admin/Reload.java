@@ -1,12 +1,15 @@
 package biz.princeps.landlord.commands.admin;
 
 import biz.princeps.landlord.api.ILandLord;
+import biz.princeps.landlord.api.Options;
 import biz.princeps.landlord.commands.LandlordCommand;
 import biz.princeps.lib.command.Arguments;
 import biz.princeps.lib.command.Properties;
 import com.google.common.collect.Sets;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class Reload extends LandlordCommand {
 
@@ -23,8 +26,11 @@ public class Reload extends LandlordCommand {
 
         issuer.sendMessage(ChatColor.RED + "Reloading is not recommended! Before reporting any bugs, please restart your server.");
 
-        plugin.getLangManager().reload();
+        plugin.getConfigurationManager().handleConfigUpdate(plugin.getDataFolder() + "/config.yml", "/config.yml");
         plugin.reloadConfig();
+        RegisteredServiceProvider<Economy> economyProvider = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+        Options.setConfig(plugin.getConfig(), economyProvider != null && economyProvider.getProvider() != null);
+        plugin.getLangManager().reload();
         plugin.setupPrincepsLib();
         plugin.postloadPrincepsLib();
 

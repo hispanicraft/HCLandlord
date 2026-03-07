@@ -608,7 +608,9 @@ Manage:
     enable: true
   clan-access:
     enable: true
-    item: IRON_DOOR
+    item: LEVER
+    enabled-item: EMERALD_BLOCK
+    disabled-item: REDSTONE_BLOCK
   setgreet:
     enable: true
     item: BAKED_POTATO

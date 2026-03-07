@@ -33,8 +33,6 @@ public class LangManager implements ILangManager {
         this.plugin = plugin;
         filename = "messages/" + lang + ".yml";
         reload();
-        plugin.getConfigurationManager().handleConfigUpdate(plugin.getDataFolder() + "/" + filename, "/" + filename);
-        reload();
         parsePlaceholders = plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
     }
 
@@ -45,10 +43,20 @@ public class LangManager implements ILangManager {
         try {
             File folder = new File(plugin.getDataFolder(), "messages");
             if (!folder.exists())
-                folder.mkdir();
+                folder.mkdirs();
 
-            if (!f.exists())
+            if (!f.exists()) {
+                if (plugin.getResource(filename) == null) {
+                    plugin.getLogger().warning("The bundled translation " + filename + " does not exist. " +
+                            "Please switch to a supported language or provide the file manually.");
+                    return;
+                }
                 plugin.saveResource(filename, false);
+            }
+
+            if (plugin.getConfigurationManager() != null) {
+                plugin.getConfigurationManager().handleConfigUpdate(plugin.getDataFolder() + "/" + filename, "/" + filename);
+            }
 
             this.msg.load(f);
         } catch (IOException | InvalidConfigurationException e) {
