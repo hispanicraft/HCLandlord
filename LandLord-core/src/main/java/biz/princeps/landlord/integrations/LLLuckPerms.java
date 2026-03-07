@@ -22,7 +22,9 @@ public class LLLuckPerms {
             api = provider.getProvider();
         }
 
-        api.getContextManager().registerCalculator(new CustomCalculator());
+        if (api != null) {
+            api.getContextManager().registerCalculator(new CustomCalculator());
+        }
     }
 
 
@@ -41,6 +43,12 @@ public class LLLuckPerms {
                 if (region.isFriend(p.getUniqueId())) {
                     contextConsumer.accept("land", "befriended");
                 }
+                if (!region.isOwner(p.getUniqueId())
+                        && region.isClanAccessEnabled()
+                        && region.canPlayerAccess(p.getUniqueId())
+                        && !region.isFriend(p.getUniqueId())) {
+                    contextConsumer.accept("land", "clan");
+                }
             }
         }
 
@@ -50,6 +58,7 @@ public class LLLuckPerms {
             builder.add("land", "wilderness");
             builder.add("land", "own");
             builder.add("land", "befriended");
+            builder.add("land", "clan");
 
             return builder.build();
         }

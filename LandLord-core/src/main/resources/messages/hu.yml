@@ -307,6 +307,12 @@ Commands:
         - ' &7Utoljára látva&8: &c%seen%'
         - ' &7&oKattints a törléshez'
       unfriend: '&7A játékos &c%player%&7 mostantól nem a barátod'
+    ClanAccess:
+      title: '&cClan Access'
+      description:
+        - ' &7Toggle whether clan members of the'
+        - ' &7owner are treated like trusted access'
+        - ' &7Status&8: &c%var%'
     Unclaim:
       title: '&cVisszaigénylés'
       description:

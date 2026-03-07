@@ -20,6 +20,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -78,7 +79,7 @@ public class OwnedLand extends AOwnedLand {
 
     @Override
     public String getMembersString() {
-        return formatNames(region.getMembers().getUniqueIds());
+        return formatNames(getFriends());
     }
 
     @Override
@@ -101,26 +102,97 @@ public class OwnedLand extends AOwnedLand {
     public void replaceOwner(UUID uuid) {
         region.getOwners().clear();
         region.getOwners().addPlayer(uuid);
+        refreshAccessMembers();
     }
 
     @Override
     public boolean isFriend(UUID uuid) {
-        return region.getMembers().contains(uuid);
+        return getFriends().contains(uuid);
     }
 
     @Override
     public Set<UUID> getFriends() {
-        return region.getMembers().getUniqueIds();
+        ensureManualFriendsMigrated();
+        Set<String> rawFriends = region.getFlag(WorldGuardManager.MANUAL_FRIENDS_FLAG);
+        Set<UUID> friends = new HashSet<>();
+        if (rawFriends == null) {
+            return friends;
+        }
+
+        for (String rawFriend : rawFriends) {
+            try {
+                friends.add(UUID.fromString(rawFriend));
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        return friends;
     }
 
     @Override
     public void addFriend(UUID uuid) {
-        region.getMembers().addPlayer(uuid);
+        Set<UUID> friends = getFriends();
+        friends.add(uuid);
+        setManualFriends(friends);
+        refreshAccessMembers();
     }
 
     @Override
     public void removeFriend(UUID uuid) {
-        region.getMembers().removePlayer(uuid);
+        Set<UUID> friends = getFriends();
+        friends.remove(uuid);
+        setManualFriends(friends);
+        refreshAccessMembers();
+    }
+
+    @Override
+    public boolean isClanAccessEnabled() {
+        Boolean enabled = region.getFlag(WorldGuardManager.CLAN_ACCESS_FLAG);
+        return enabled != null && enabled;
+    }
+
+    @Override
+    public void setClanAccessEnabled(boolean enabled) {
+        region.setFlag(WorldGuardManager.CLAN_ACCESS_FLAG, enabled);
+        region.setDirty(true);
+        refreshAccessMembers();
+    }
+
+    @Override
+    public boolean canPlayerAccess(UUID uuid) {
+        if (uuid == null) {
+            return false;
+        }
+        if (isOwner(uuid) || isFriend(uuid)) {
+            return true;
+        }
+        if (!isClanAccessEnabled()) {
+            return false;
+        }
+
+        UUID owner = getOwner();
+        return owner != null && plugin.getClanAccessProvider().arePlayersInSameClan(owner, uuid);
+    }
+
+    @Override
+    public void refreshAccessMembers() {
+        Set<UUID> effectiveMembers = new HashSet<>(getFriends());
+        UUID owner = getOwner();
+
+        if (owner != null && isClanAccessEnabled()) {
+            effectiveMembers.addAll(plugin.getClanAccessProvider().getClanMembersOfOwner(owner));
+        }
+        effectiveMembers.remove(owner);
+
+        Set<UUID> currentMembers = new HashSet<>(region.getMembers().getUniqueIds());
+        if (currentMembers.equals(effectiveMembers)) {
+            return;
+        }
+
+        region.getMembers().clear();
+        for (UUID member : effectiveMembers) {
+            region.getMembers().addPlayer(member);
+        }
+        region.setDirty(true);
     }
 
     @Override
@@ -254,6 +326,8 @@ public class OwnedLand extends AOwnedLand {
                 flag1.toggleAll();
             }
         }
+        region.setFlag(WorldGuardManager.CLAN_ACCESS_FLAG, false);
+        region.setFlag(WorldGuardManager.MANUAL_FRIENDS_FLAG, new HashSet<String>());
         // add other flags
         OfflinePlayer p = plugin.getServer().getOfflinePlayer(owner);
         if (p.getName() == null) {
@@ -275,7 +349,9 @@ public class OwnedLand extends AOwnedLand {
             String flagname = iWrapperFlag.getName().toLowerCase().replace("-group", "");
             if (!rawList.contains(flagname) &&
                     !flagname.equals(Flags.GREET_MESSAGE.getName().toLowerCase()) &&
-                    !flagname.equals(Flags.FAREWELL_MESSAGE.getName().toLowerCase())) {
+                    !flagname.equals(Flags.FAREWELL_MESSAGE.getName().toLowerCase()) &&
+                    !flagname.equals(WorldGuardManager.CLAN_ACCESS_FLAG.getName().toLowerCase()) &&
+                    !flagname.equals(WorldGuardManager.MANUAL_FRIENDS_FLAG.getName().toLowerCase())) {
 
                 region.setFlag(iWrapperFlag, null);
             }
@@ -312,6 +388,14 @@ public class OwnedLand extends AOwnedLand {
             region.setFlag(Flags.FAREWELL_MESSAGE,
                     plugin.getLangManager().getRawString("Alerts.defaultFarewell").replace("%owner%", p.getName()));
         }
+
+        if (!region.getFlags().containsKey(WorldGuardManager.CLAN_ACCESS_FLAG)) {
+            region.setFlag(WorldGuardManager.CLAN_ACCESS_FLAG, false);
+        }
+        if (!region.getFlags().containsKey(WorldGuardManager.MANUAL_FRIENDS_FLAG)) {
+            migrateMembersToManualFlag();
+        }
+        refreshAccessMembers();
     }
 
     @Override
@@ -320,6 +404,7 @@ public class OwnedLand extends AOwnedLand {
         UUID owner = getOwner();
         OwnedLand ownedLand = (OwnedLand) wg.claim(getChunk(), owner);
         ownedLand.getRegion().copyFrom(this.region);
+        ownedLand.refreshAccessMembers();
     }
 
     @Override
@@ -333,6 +418,31 @@ public class OwnedLand extends AOwnedLand {
 
     private Flag<StateFlag.State> getWGFlag(String flagName) {
         return FLAGS_CACHE.computeIfAbsent(flagName, name -> (Flag<StateFlag.State>) Flags.fuzzyMatchFlag(flagRegistry, name));
+    }
+
+    private void ensureManualFriendsMigrated() {
+        if (region.getFlag(WorldGuardManager.MANUAL_FRIENDS_FLAG) != null) {
+            return;
+        }
+        migrateMembersToManualFlag();
+    }
+
+    private void migrateMembersToManualFlag() {
+        Set<String> rawFriends = new HashSet<>();
+        for (UUID uuid : region.getMembers().getUniqueIds()) {
+            rawFriends.add(uuid.toString());
+        }
+        region.setFlag(WorldGuardManager.MANUAL_FRIENDS_FLAG, rawFriends);
+        region.setDirty(true);
+    }
+
+    private void setManualFriends(Set<UUID> friends) {
+        Set<String> rawFriends = new HashSet<>();
+        for (UUID friend : friends) {
+            rawFriends.add(friend.toString());
+        }
+        region.setFlag(WorldGuardManager.MANUAL_FRIENDS_FLAG, rawFriends);
+        region.setDirty(true);
     }
 
 }

@@ -130,4 +130,12 @@ public interface ILandLord extends Plugin {
      */
     IConfigurationManager getConfigurationManager();
 
+    /**
+     * Get the reference to the clan access provider.
+     * This class is responsible for integrating dynamic clan-based access to claims.
+     *
+     * @return the clan access provider
+     */
+    IClanAccessProvider getClanAccessProvider();
+
 }

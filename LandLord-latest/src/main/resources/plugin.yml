@@ -4,7 +4,7 @@ main: biz.princeps.landlord.LandLord
 authors: [ SpatiumPrinceps, Aurelien30000, SirYwell, RainbowDashLabs ]
 website: https://www.spigotmc.org/resources/44398/
 depend: [ WorldGuard ]
-softdepend: [ Vault, PlaceholderAPI, MVdWPlaceholderAPI, Towny ]
+softdepend: [ Vault, PlaceholderAPI, MVdWPlaceholderAPI, Towny, HCClans ]
 api-version: "1.16"
 
 permissions:
@@ -57,6 +57,7 @@ permissions:
     description: required to manage all the stuff in ll manage
     children:
       landlord.player.manage.friends: true
+      landlord.player.manage.clan-access: true
       landlord.player.manage.regenerate: true
       landlord.player.manage.setgreet: true
       landlord.player.manage.setfarewell: true
@@ -190,6 +191,10 @@ permissions:
 
   landlord.player.manage.friends:
     description: manage friends
+    default: true
+
+  landlord.player.manage.clan-access:
+    description: manage clan access
     default: true
 
   landlord.player.manage.regenerate:

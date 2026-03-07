@@ -308,6 +308,12 @@ Commands:
         - ' &7Ostanio widziany&8: &c%seen%'
         - ' &7&oNaciśnij, aby usunąć'
       unfriend: '&7Usuń gracza z przyjaciół &c%player%'
+    ClanAccess:
+      title: '&cClan Access'
+      description:
+        - ' &7Toggle whether clan members of the'
+        - ' &7owner are treated like trusted access'
+        - ' &7Status&8: &c%var%'
     Unclaim:
       title: '&cZwolnij'
       description:

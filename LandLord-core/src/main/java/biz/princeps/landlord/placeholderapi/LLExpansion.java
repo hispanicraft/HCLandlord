@@ -117,6 +117,26 @@ public class LLExpansion extends PlaceholderExpansion {
                 }
                 return "∅";
 
+            case "current_land_clan_access":
+                IOwnedLand regionClan = wg.getRegion(player.getLocation());
+                return String.valueOf(regionClan != null && regionClan.isClanAccessEnabled());
+
+            case "current_land_player_access":
+                IOwnedLand regionAccess = wg.getRegion(player.getLocation());
+                if (regionAccess == null) {
+                    return "wilderness";
+                }
+                if (regionAccess.isOwner(player.getUniqueId())) {
+                    return "owner";
+                }
+                if (regionAccess.isFriend(player.getUniqueId())) {
+                    return "friend";
+                }
+                if (regionAccess.isClanAccessEnabled() && regionAccess.canPlayerAccess(player.getUniqueId())) {
+                    return "clan";
+                }
+                return "none";
+
             // name of the current land
             case "current_land_name":
                 return wg.getLandName(player.getLocation());

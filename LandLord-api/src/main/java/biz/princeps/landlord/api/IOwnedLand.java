@@ -103,6 +103,52 @@ public interface IOwnedLand {
 
     void removeFriend(UUID uuid);
 
+    /**
+     * Checks if access by clan is enabled for this land.
+     *
+     * @return if clan members of the owner are trusted on this land
+     */
+    default boolean isClanAccessEnabled() {
+        return false;
+    }
+
+    /**
+     * Enables or disables clan-based access for this land.
+     *
+     * @param enabled true to trust clan members of the owner
+     */
+    default void setClanAccessEnabled(boolean enabled) {
+    }
+
+    /**
+     * Toggles clan-based access for this land.
+     *
+     * @return the new clan access state
+     */
+    default boolean toggleClanAccess() {
+        boolean enabled = !isClanAccessEnabled();
+        setClanAccessEnabled(enabled);
+        return enabled;
+    }
+
+    /**
+     * Checks if a player should be treated as trusted access on this land.
+     * This includes the owner, manual friends and optionally clan members.
+     *
+     * @param uuid the player uuid
+     * @return if the player is trusted on this land
+     */
+    default boolean canPlayerAccess(UUID uuid) {
+        return isOwner(uuid) || isFriend(uuid);
+    }
+
+    /**
+     * Refresh the effective members stored on the backing region.
+     * Implementations may use this to project dynamic access sources into WorldGuard.
+     */
+    default void refreshAccessMembers() {
+    }
+
     World getWorld();
 
     Chunk getChunk();

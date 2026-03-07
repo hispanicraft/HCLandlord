@@ -606,6 +606,9 @@ Manage:
       item: BLAZE_POWDER
   friends:
     enable: true
+  clan-access:
+    enable: true
+    item: IRON_DOOR
   setgreet:
     enable: true
     item: BAKED_POTATO

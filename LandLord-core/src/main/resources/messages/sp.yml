@@ -308,6 +308,12 @@ Commands:
         - ' &7Ultima vez visto&8: &c%seen%'
         - ' &7&oHaga clic para eliminar'
       unfriend: '&7Jugador no amigo &c%player%'
+    ClanAccess:
+      title: '&cAcceso por clan'
+      description:
+        - ' &7Alterna si los miembros del clan del'
+        - ' &7dueño cuentan como acceso confiable'
+        - ' &7Estado&8: &c%var%'
     Unclaim:
       title: '&cLiberar'
       description:

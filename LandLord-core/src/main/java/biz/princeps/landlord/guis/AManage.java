@@ -432,6 +432,22 @@ public class AManage extends AbstractGUI {
             this.setIcon(position++, icon);
         }
 
+        if (plugin.getConfig().getBoolean("Manage.clan-access.enable") &&
+                player.hasPermission("landlord.player.manage.clan-access")) {
+            Icon icon = new Icon(new ItemStack(Material.valueOf(plugin.getConfig().getString("Manage.clan-access.item"))));
+            icon.setName(lm.getRawString("Commands.Manage.ClanAccess.title"));
+            icon.setLore(formatList(lm.getStringList("Commands.Manage.ClanAccess.description"), "%var%",
+                    formatToggleState(land.isClanAccessEnabled())));
+            setGlowing(icon.itemStack, land.isClanAccessEnabled());
+            icon.addClickAction((p) -> {
+                boolean targetState = !land.isClanAccessEnabled();
+                toggleClanAccessForRegions(targetState);
+                refresh();
+            });
+
+            this.setIcon(position++, icon);
+        }
+
         ConfigurationSection cs = plugin.getConfig().getConfigurationSection("Manage.commands");
         Set<String> keys = cs.getKeys(false);
         for (String key : keys) {
@@ -606,6 +622,10 @@ public class AManage extends AbstractGUI {
         }
     }
 
+    private String formatToggleState(boolean bool) {
+        return bool ? lm.getRawString("Commands.Manage.allow") : lm.getRawString("Commands.Manage.deny");
+    }
+
     private void setGlowing(ItemStack stack, boolean glowing) {
         ItemMeta itemMeta = stack.getItemMeta();
         if (glowing) {
@@ -649,6 +669,26 @@ public class AManage extends AbstractGUI {
         }
 
         return toReturn;
+    }
+
+    private void toggleClanAccessForRegions(boolean enabled) {
+        for (IOwnedLand region : regions) {
+            if (region.isClanAccessEnabled() == enabled) {
+                continue;
+            }
+
+            boolean oldState = region.isClanAccessEnabled();
+            region.setClanAccessEnabled(enabled);
+            plugin.getServer().getPluginManager().callEvent(new LandManageEvent(player, region,
+                    "CLAN_ACCESS", oldState, enabled));
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                plugin.getMapManager().updateAll();
+            }
+        }.runTaskLater(plugin, 20L);
     }
 
 }

@@ -14,7 +14,11 @@ import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.BooleanFlag;
 import com.sk89q.worldguard.protection.flags.DoubleFlag;
+import com.sk89q.worldguard.protection.flags.SetFlag;
+import com.sk89q.worldguard.protection.flags.StringFlag;
+import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -43,6 +47,8 @@ import java.util.UUID;
 public class WorldGuardManager extends AWorldGuardManager {
 
     public static final DoubleFlag REGION_PRICE_FLAG = new DoubleFlag("region-price");
+    public static final BooleanFlag CLAN_ACCESS_FLAG = new BooleanFlag("ll-clan-access");
+    public static final SetFlag<String> MANUAL_FRIENDS_FLAG = new SetFlag<>("ll-manual-friends", new StringFlag("ll-manual-friend"));
 
     private final WorldGuardPlugin wgPlugin;
     private final WorldGuard wg;
@@ -66,14 +72,16 @@ public class WorldGuardManager extends AWorldGuardManager {
 
     public static void initFlags() {
         FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
+        registerFlag(REGION_PRICE_FLAG, registry);
+        registerFlag(CLAN_ACCESS_FLAG, registry);
+        registerFlag(MANUAL_FRIENDS_FLAG, registry);
+    }
+
+    private static void registerFlag(Flag<?> flag, FlagRegistry registry) {
         try {
-            // Register our flag with the registry.
-            registry.register(REGION_PRICE_FLAG);
+            registry.register(flag);
         } catch (FlagConflictException e) {
-            // Some other plugin registered a flag by the same name already.
-            // You may want to re-register with a different name, but this
-            // could cause issues with saved flags in region files. If you don't mind
-            // sharing a flag, consider making your field non-final and assigning it.
+            // Keep the already registered flag.
         }
     }
 

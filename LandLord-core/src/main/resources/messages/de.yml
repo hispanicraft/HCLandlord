@@ -300,6 +300,12 @@ Commands:
         - ' &7Zuletzt online&8: &c%seen%'
         - ' &7&oZum entfernen klicken'
       unfriend: '&7 &c%player% ist nun kein Mitglied mehr!'
+    ClanAccess:
+      title: '&cClan Access'
+      description:
+        - ' &7Toggle whether clan members of the'
+        - ' &7owner are treated like trusted access'
+        - ' &7Status&8: &c%var%'
     Unclaim:
       title: '&cUnclaimen'
       description:

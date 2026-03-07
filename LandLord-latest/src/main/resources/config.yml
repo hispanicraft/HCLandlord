@@ -610,6 +610,9 @@ Manage:
     item: CARROT_ON_A_STICK
   friends:
     enable: true
+  clan-access:
+    enable: true
+    item: IRON_DOOR
   damage-animals:
     enable: true
     item: COD

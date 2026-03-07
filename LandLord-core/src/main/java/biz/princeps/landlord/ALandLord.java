@@ -5,6 +5,7 @@ import biz.princeps.landlord.api.ICostManager;
 import biz.princeps.landlord.api.IDelimitationManager;
 import biz.princeps.landlord.api.ILandLord;
 import biz.princeps.landlord.api.ILangManager;
+import biz.princeps.landlord.api.IClanAccessProvider;
 import biz.princeps.landlord.api.IMapManager;
 import biz.princeps.landlord.api.IMaterialsManager;
 import biz.princeps.landlord.api.IMobManager;
@@ -16,8 +17,10 @@ import biz.princeps.landlord.api.IVaultManager;
 import biz.princeps.landlord.api.IWorldGuardManager;
 import biz.princeps.landlord.api.Options;
 import biz.princeps.landlord.commands.Landlordbase;
+import biz.princeps.landlord.integrations.HCClansHook;
 import biz.princeps.landlord.integrations.LLLuckPerms;
 import biz.princeps.landlord.integrations.Towny;
+import biz.princeps.landlord.listener.ClanAccessListener;
 import biz.princeps.landlord.listener.JoinListener;
 import biz.princeps.landlord.listener.LandChangeListener;
 import biz.princeps.landlord.listener.MapListener;
@@ -67,6 +70,7 @@ public abstract class ALandLord extends JavaPlugin implements ILandLord, Listene
     protected IRegenerationManager regenerationManager;
     protected IMultiTaskManager multiTaskManager;
     protected IConfigurationManager configurationManager;
+    protected IClanAccessProvider clanAccessProvider;
 
     @Override
     public void onLoad() {
@@ -88,6 +92,7 @@ public abstract class ALandLord extends JavaPlugin implements ILandLord, Listene
         setupManagers();
         setupListeners();
         setupPlayers();
+        syncClanAccessClaims();
         setupMultiTaskManager();
         setupMetrics();
         postloadPrincepsLib();
@@ -249,6 +254,7 @@ public abstract class ALandLord extends JavaPlugin implements ILandLord, Listene
      * TODO add FeatherBoard nop not gonna happen.
      */
     private void setupIntegrations() {
+        this.clanAccessProvider = new HCClansHook(this);
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new LLExpansion(this).register();
         }
@@ -272,9 +278,22 @@ public abstract class ALandLord extends JavaPlugin implements ILandLord, Listene
         new JoinListener(this);
         new MapListener(this);
         new LandChangeListener(this);
+        new ClanAccessListener(this);
 
         if (getConfig().getBoolean("SecureWorld.enable")) {
             new SecureWorldListener(this);
+        }
+    }
+
+    private void syncClanAccessClaims() {
+        if (worldGuardManager == null) {
+            return;
+        }
+
+        for (biz.princeps.landlord.api.IOwnedLand land : worldGuardManager.getRegions()) {
+            if (land.isClanAccessEnabled()) {
+                land.refreshAccessMembers();
+            }
         }
     }
 
@@ -369,5 +388,10 @@ public abstract class ALandLord extends JavaPlugin implements ILandLord, Listene
     @Override
     public IConfigurationManager getConfigurationManager() {
         return configurationManager;
+    }
+
+    @Override
+    public IClanAccessProvider getClanAccessProvider() {
+        return clanAccessProvider;
     }
 }

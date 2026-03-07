@@ -126,7 +126,7 @@ public class LandMap {
                     if (land.getOwner().equals(p.getUniqueId())) {
                         symbol = ownSymbol;
                         color = ChatColor.GREEN;
-                    } else if (land.isFriend(p.getUniqueId())) {
+                    } else if (land.canPlayerAccess(p.getUniqueId())) {
                         symbol = friendsSymbol;
                         color = ChatColor.YELLOW;
                     } else {
